@@ -15,7 +15,6 @@ public class ChatbotController {
         this.chatbotService = chatbotService;
     }
 
-
     @PostMapping("/chat")
     public ResponseEntity<String> chat(@RequestParam(value = "question") String question) {
 

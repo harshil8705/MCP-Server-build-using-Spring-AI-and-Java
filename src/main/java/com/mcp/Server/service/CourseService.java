@@ -23,6 +23,18 @@ public class CourseService {
     @Transactional
     public Course addNewCourse(@Valid Course course) {
 
+        if((course.getCourseTitle() == null || course.getCourseTitle().isBlank()) && (course.getCourseDescription() == null || course.getCourseDescription().isBlank())) {
+            throw new RuntimeException("Please provide the Course Title and Description.");
+        }
+
+        if(course.getCourseTitle() == null || course.getCourseTitle().isBlank()) {
+            throw new RuntimeException("Please Provide the Course Title.");
+        }
+
+        if (course.getCourseDescription() == null || course.getCourseDescription().isBlank()) {
+            throw new RuntimeException("Please provide the Course Description.");
+        }
+
         return courseRepository.save(course);
 
     }
