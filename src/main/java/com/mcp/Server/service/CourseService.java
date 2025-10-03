@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,35 +20,48 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    @Tool(name = "addNewCourse", description = "Add a New Course")
+    @Tool(
+            name = "addNewCourse",
+            description = "Add a new course with the given title and description"
+    )
     @Transactional
-    public Course addNewCourse(@Valid Course course) {
+    public Course addNewCourse(
+            @ToolParam(description = "The title of the course")
+            @NotBlank(message = "Course title is required")
+                String courseTitle,
+            @ToolParam(description = "The description of the course")
+            @NotBlank(message = "Course description is required")
+                String courseDescription
+    ) {
 
-        if((course.getCourseTitle() == null || course.getCourseTitle().isBlank()) && (course.getCourseDescription() == null || course.getCourseDescription().isBlank())) {
-            throw new RuntimeException("Please provide the Course Title and Description.");
-        }
-
-        if(course.getCourseTitle() == null || course.getCourseTitle().isBlank()) {
-            throw new RuntimeException("Please Provide the Course Title.");
-        }
-
-        if (course.getCourseDescription() == null || course.getCourseDescription().isBlank()) {
-            throw new RuntimeException("Please provide the Course Description.");
-        }
+        Course course = Course.builder()
+                .courseTitle(courseTitle)
+                .courseDescription(courseDescription.trim())
+                .build();
 
         return courseRepository.save(course);
 
     }
 
-    @Tool(name = "getAllCourses", description = "Get all the Available Courses.")
+    @Tool(
+            name = "getAllCourses",
+            description = "Get the list of all Currently Available Courses."
+    )
     public List<Course> getAllCourses() {
 
         return courseRepository.findAll();
 
     }
 
-    @Tool(name = "getCoursesByTitle", description = "Get courses based on the provided courseTitle")
-    public List<Course> getCoursesByTitle(@NotBlank(message = "Course title is required") String courseTitle) {
+    @Tool(
+            name = "getCoursesByTitle",
+            description = "Get the list of all the available courses whose courseTitle matches with the provided courseTitle."
+    )
+    public List<Course> getCoursesByTitle(
+            @ToolParam(description = "The small title of the course")
+            @NotBlank(message = "Course title is required")
+                String courseTitle
+    ) {
 
         return courseRepository.findByCourseTitleContainingIgnoreCase(courseTitle);
 

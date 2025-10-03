@@ -20,9 +20,10 @@ public class CourseController {
     }
 
     @PostMapping("/add/course")
-    public ResponseEntity<Course> addNewCourse(@Valid @RequestBody Course course) {
+    public ResponseEntity<Course> addNewCourse(@RequestParam(name = "courseTitle") String courseTitle,
+                                               @RequestParam(name = "courseDescription") String courseDescription) {
 
-        return new ResponseEntity<>(courseService.addNewCourse(course), HttpStatus.OK);
+        return new ResponseEntity<>(courseService.addNewCourse(courseTitle, courseDescription), HttpStatus.OK);
 
     }
 
