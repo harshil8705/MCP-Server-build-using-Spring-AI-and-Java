@@ -27,9 +27,9 @@ public class McpConfig {
     }
 
     @Bean
-    public ChatClient chatClient(ChatModel chatModel, List<ToolCallback> toolCallbacks) {
+    public ChatClient chatClient(ChatModel chatModel) {
         return ChatClient.builder(chatModel)
-                .defaultToolCallbacks(toolCallbacks)
+                .defaultToolCallbacks(toolCallbacks())
                 .build();
     }
 
