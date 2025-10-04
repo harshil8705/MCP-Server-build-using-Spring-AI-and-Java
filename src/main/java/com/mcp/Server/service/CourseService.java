@@ -3,7 +3,6 @@ package com.mcp.Server.service;
 import com.mcp.Server.model.Course;
 import com.mcp.Server.repository.CourseRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
