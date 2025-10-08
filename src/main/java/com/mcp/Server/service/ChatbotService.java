@@ -52,8 +52,6 @@ public class ChatbotService {
             - Deliver final answers as if you are the end-user-facing assistant — not the backend system.
             """;
 
-
-
         return chatClient
                 .prompt()
                 .system(systemPrompt)

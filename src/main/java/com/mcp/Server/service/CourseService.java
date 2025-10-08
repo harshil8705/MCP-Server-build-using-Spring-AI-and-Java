@@ -66,4 +66,23 @@ public class CourseService {
 
     }
 
+    @Tool(
+            name = "removeCourseById",
+            description = "Remove the course whose courseId is equals to the provided courseId. If course with provided courseId doesn't exists then return course doesn't exists."
+    )
+    public String removeCourseById(
+            @ToolParam(description = "The Id of the course")
+            @NotBlank(message = "courseId is required")
+                Long courseId
+    ) {
+
+        Course courseToDelete = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course with the provided courseId doesn't exists."));
+
+        courseRepository.delete(courseToDelete);
+
+        return "Course with courseId: " + courseId + " removed successfully.";
+
+    }
+
 }
