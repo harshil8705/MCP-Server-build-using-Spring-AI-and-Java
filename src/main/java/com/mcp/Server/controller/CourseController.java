@@ -2,7 +2,6 @@ package com.mcp.Server.controller;
 
 import com.mcp.Server.model.Course;
 import com.mcp.Server.service.CourseService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +44,13 @@ public class CourseController {
     public ResponseEntity<String> removeCourseById(@PathVariable Long courseId) {
 
         return new ResponseEntity<>(courseService.removeCourseById(courseId), HttpStatus.OK);
+
+    }
+
+    @PutMapping("/update/course/{courseId}")
+    public ResponseEntity<Course> updateCourseByCourseId(@PathVariable Long courseId, String courseTitle, String courseDescription) {
+
+        return new ResponseEntity<>(courseService.updateCourseByCourseId(courseId, courseTitle, courseDescription), HttpStatus.OK);
 
     }
 

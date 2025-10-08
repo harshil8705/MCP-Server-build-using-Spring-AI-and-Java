@@ -4,6 +4,8 @@ import com.mcp.Server.model.Course;
 import com.mcp.Server.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.internal.util.collections.IdentitySet;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
@@ -68,21 +70,44 @@ public class CourseService {
 
     @Tool(
             name = "removeCourseById",
-            description = "Remove the course whose courseId is equals to the provided courseId. If course with provided courseId doesn't exists then return course doesn't exists."
+            description = "Remove the course whose courseId matches the provided courseId. If no course is found, return 'Course doesn't exist'."
     )
     public String removeCourseById(
-            @ToolParam(description = "The Id of the course")
-            @NotBlank(message = "courseId is required")
+            @ToolParam(description = "The ID of the course")
+            @NotNull(message = "courseId is required")
                 Long courseId
     ) {
-
         Course courseToDelete = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course with the provided courseId doesn't exists."));
+                .orElseThrow(() -> new RuntimeException("Course with courseId " + courseId + " doesn't exist."));
 
         courseRepository.delete(courseToDelete);
 
         return "Course with courseId: " + courseId + " removed successfully.";
+    }
 
+
+    @Tool(
+            name = "updateCourseByCourseId",
+            description = "Update the title and description of a course based on its courseId."
+    )
+    public Course updateCourseByCourseId(
+            @ToolParam(description = "The ID of the course")
+            @NotNull(message = "courseId is required")
+                Long courseId,
+            @ToolParam(description = "The small title of the course")
+            @NotBlank(message = "Course title is required")
+                String courseTitle,
+            @ToolParam(description = "The description of the course")
+            @NotBlank(message = "Course description is required")
+                String courseDescription
+    ) {
+        Course courseToUpdate = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course with courseId " + courseId + " doesn't exist."));
+
+        courseToUpdate.setCourseTitle(courseTitle.trim());
+        courseToUpdate.setCourseDescription(courseDescription.trim());
+
+        return courseRepository.save(courseToUpdate);
     }
 
 }
