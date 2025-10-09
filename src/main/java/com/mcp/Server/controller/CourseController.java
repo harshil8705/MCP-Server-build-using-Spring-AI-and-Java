@@ -41,16 +41,16 @@ public class CourseController {
     }
 
     @DeleteMapping("/remove/course/{courseId}")
-    public ResponseEntity<String> removeCourseById(@PathVariable Long courseId) {
+    public ResponseEntity<String> removeCourseById(@PathVariable Long courseId, boolean userConfirmed) {
 
-        return new ResponseEntity<>(courseService.removeCourseById(courseId), HttpStatus.OK);
+        return new ResponseEntity<>(courseService.removeCourseById(courseId, userConfirmed), HttpStatus.OK);
 
     }
 
     @PutMapping("/update/course/{courseId}")
-    public ResponseEntity<Course> updateCourseByCourseId(@PathVariable Long courseId, String courseTitle, String courseDescription) {
+    public ResponseEntity<?> updateCourseByCourseId(@PathVariable Long courseId, String courseTitle, String courseDescription, boolean userConfirmed) {
 
-        return new ResponseEntity<>(courseService.updateCourseByCourseId(courseId, courseTitle, courseDescription), HttpStatus.OK);
+        return new ResponseEntity<>(courseService.updateCourseByCourseId(courseId, courseTitle, courseDescription, userConfirmed), HttpStatus.OK);
 
     }
 
